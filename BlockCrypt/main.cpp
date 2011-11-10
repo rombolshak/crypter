@@ -5,9 +5,9 @@
  * Created on 10 Ноябрь 2011 г., 23:04
  */
 
-#include <cstdlib>
+//#include <cstdlib>
 
-using namespace std;
+//using namespace std;
 
 /*
  * 
