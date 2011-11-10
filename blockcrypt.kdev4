@@ -1,0 +1,4 @@
+[Project]
+Name=blockcrypt
+Manager=KDevCMakeManager
+VersionControl=kdevgit
