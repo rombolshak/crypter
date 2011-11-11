@@ -1,4 +1,4 @@
 project(blockcrypt)
 
-add_executable(blockcrypt main.cpp)
+add_executable(blockcrypt main.cpp md5.cpp)
 
