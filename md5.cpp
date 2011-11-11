@@ -333,6 +333,14 @@ MD5& MD5::finalize()
 
 //////////////////////////////
 
+void MD5::getNumbers(uint4 output[]) 
+{
+	output[0] = state[0];
+	output[1] = state[1];
+	output[2] = state[2];
+	output[3] = state[3];
+}
+
 // return hex representation of digest as string
 std::string MD5::hexdigest() const
 {

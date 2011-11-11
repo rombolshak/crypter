@@ -27,6 +27,7 @@ public:
 	MD5& finalize();
 	std::string hexdigest() const;
 	friend std::ostream& operator<<(std::ostream&, MD5 md5);
+	void getNumbers(unsigned int output[]);
 	
 private:
 	void init();
