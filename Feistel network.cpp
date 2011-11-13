@@ -1,5 +1,21 @@
 #include "Feistel network.h"
 
+#include <string>
+
+string FNetwork::encrypt(string msg, string key)
+{
+	int diff;
+	string res = "";
+	for (int i = 0; i < countBlocks(msg); ++i) {
+		if ((diff = string::length(msg[i*16]) - 16) < 0) 
+			for (int k = 0; k < diff; ++k)
+				msg += '0';
+			string s = msg.substr(i*16).substr(0, 16);
+		string L = s.substr(s, 8);
+		string R = s.substr(9, 8);
+	}
+}
+
 void FNetwork::fillRandArray(long unsigned int seed)
 {
     randomizer.seed(seed);
@@ -59,4 +75,3 @@ string FNetwork::F(const string key, const string left)
     st >> res;
     return res;
 }
-
