@@ -12,11 +12,16 @@ int main(int argc, char **argv) {
 	MD5 m = MD5("md5");
 	m.getNumbers(out);
 	
+	FNetwork *f = new FNetwork();
+	/* FIXME
+	 * следующая строка выкидывает out_of_range, ибо R незаполнено
+	 */
+	cout << f->encrypt("a", "key"); // out_of_range, ибо R не заполнен еще
 	
 	cout << "md5 of 'grape': " << md5("grape")<<endl;
 	cout << "md5 numbers are: " << out[0] << ", " << out[1] << ", " << out[2] << ", " << out[3] << ", " << endl;
 	
-	
+	/*
 	Random *r = new Random();
 	r->seed(out[0]);
 	cout << "First 10 random numbers with seed " << out[0] << ":\n";
@@ -33,7 +38,7 @@ int main(int argc, char **argv) {
 	cout << "Firs 50 random numbers with default seed:\n";
 	for (int i=0;i<50;++i)
 	    cout << i << ':' << r->next() << endl;
-	
+	*/
 	/*
 	FNetwork* f = new FNetwork();
 	f->generateRoundKeys("msg", "qwertyqwerty"); 	// - private now
