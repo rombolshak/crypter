@@ -21,18 +21,18 @@ int main(int argc, char **argv) {
 	r->seed(out[0]);
 	cout << "First 10 random numbers with seed " << out[0] << ":\n";
 	for (int i=0;i<10;++i)
-	    cout << r->next() << endl;
+	    cout << i << ':' << r->next() << endl;
 	
 	r->seed(0);
 	cout << "First 10 random numbers with 0 seed:\n";
 	for (int i=0;i<10;++i)
-	    cout << r->next() << endl;
+	    cout << i << 'i' << r->next() << endl;
 	
 	
 	r->seed();
 	cout << "Firs 50 random numbers with default seed:\n";
 	for (int i=0;i<50;++i)
-	    cout << r->next() << endl;
+	    cout << i << ':' << r->next() << endl;
 	
 	/*
 	FNetwork* f = new FNetwork();
