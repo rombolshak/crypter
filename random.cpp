@@ -1,5 +1,6 @@
 #include "random.h"
-void Random::seed (int _seed)
+
+void Random::seed (uint32_t _seed)
 {
     x = _seed;
     y = yInit;
@@ -7,9 +8,9 @@ void Random::seed (int _seed)
     w = wInit;
 }
 
-long unsigned int Random::next()
+uint32_t Random::next()
 {
-    unsigned long t;
+    uint32_t t;
     
     t = x ^ (x << 11);
     x = y; y = z; z = w;

@@ -1,19 +1,20 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
+#include <stdint.h>
 class Random
 {
-    static const unsigned long 	xInit = 123456789,
+    static const uint32_t	xInit = 123456789,
 				yInit = 362436069,
 				zInit = 521288629,
 				wInit = 88675123;
     
-    unsigned long x, y, z, w;
+    uint32_t x, y, z, w;
     
 
 public:
     
-    Random(int _seed = 123456789)
+    Random(uint32_t _seed = 123456789)
     { 
 	this->x = _seed;
 	y = yInit;
@@ -21,10 +22,10 @@ public:
 	w = wInit;
     }
     
-    void seed (int _seed = xInit);
+    void seed (uint32_t _seed = xInit);
     
     
-    unsigned long next();
+    uint32_t next();
     
 };
 #endif /* RANDOM_H */
