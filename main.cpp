@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 	r->seed(0);
 	cout << "First 10 random numbers with 0 seed:\n";
 	for (int i=0;i<10;++i)
-	    cout << i << 'i' << r->next() << endl;
+	    cout << i << ':' << r->next() << endl;
 	
 	
 	r->seed();
