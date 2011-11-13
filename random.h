@@ -1,3 +1,6 @@
+#ifndef RANDOM_H
+#define RANDOM_H
+
 class Random
 {
     static const unsigned long 	xInit = 123456789,
@@ -24,4 +27,4 @@ public:
     unsigned long next();
     
 };
-
+#endif /* RANDOM_H */

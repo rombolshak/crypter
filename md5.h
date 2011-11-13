@@ -1,5 +1,5 @@
-#ifndef BZF_MD5_H
-#define BZF_MD5_H
+#ifndef MD5_H
+#define MD5_H
 
 #include <string>
 #include <iostream>
@@ -59,4 +59,4 @@ private:
 
 std::string md5(const std::string str);
 
-#endif
+#endif /* MD5_H */
