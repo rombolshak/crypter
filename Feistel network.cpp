@@ -7,13 +7,27 @@ string FNetwork::encrypt(string msg, string key)
 	int diff;
 	string res = "";
 	for (int i = 0; i < countBlocks(msg); ++i) {
-		if ((diff = string::length(msg[i*16]) - 16) < 0) 
+		if ((diff = msg.substr(i * 16).length() - 16) < 0) 
 			for (int k = 0; k < diff; ++k)
 				msg += '0';
-			string s = msg.substr(i*16).substr(0, 16);
-		string L = s.substr(s, 8);
+		string s = msg.substr(i*16).substr(0, 16);
+		string L = s.substr(0, 8);
 		string R = s.substr(9, 8);
+		res += doCrypt(L,R,i);
 	}
+}
+
+string FNetwork::doCrypt(string _left, string _right, int i)
+{
+	string Li = _left, Ri = _right;
+	for (int k = 0; k < roundsNo; ++k) {
+		string nL = Li, nR = Li;
+		nL = F(keys[i+k], nL);
+		nL = strxor(nL, Ri);
+		Li = (k == roundsNo - 1)?Li:nL; 
+		Ri = (k == roundsNo - 1)?nL:nR;
+	}
+	return Li + Ri;
 }
 
 void FNetwork::fillRandArray(long unsigned int seed)

@@ -56,7 +56,13 @@ private:
  	
     string strxor (const string a, const string b);
     
-    string F(const string key, const string left);
+	/**
+	 * @brief Делает основную магию
+	 * @param string key Ключ из массива R, предварительно сгенерированный @by generateRoundKeys
+	 * @param string left Левая часть блока данных
+	 */
+    string F (const string key, const string left);
+    string doCrypt(string Left, string Right, int i);
 
 };
 #endif /* FEISTEL_NETWORK_H */
