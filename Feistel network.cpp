@@ -18,7 +18,7 @@ string FNetwork::encrypt(const string _msg, const string key, bool enc)
 	for (int i = 0; i < countBlocks(msg); ++i) {
 		if ((diff = msg.substr(i * 16).length() - 16) < 0) 
 			for (int k = 0; k < -diff; ++k)
-				msg += '$';
+				msg += '\0';
 		string s = msg.substr(i*16, 16);
 		string L = s.substr(0, 8);
 		string R = s.substr(8, 8);

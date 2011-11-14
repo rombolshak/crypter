@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
     key = "superkey";
     cout << key.length() << endl;
     FNetwork *f = new FNetwork();	
-    cout << f->decrypt(f->encrypt("msg1msg2msg3msg4", key), key) << endl;
+    cout << f->decrypt(f->encrypt("msg1msg2msg3", key), key) << endl;
     
     return 0;
 }
