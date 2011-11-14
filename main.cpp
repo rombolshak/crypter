@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
     
     key = "superkey";
     FNetwork *f = new FNetwork();
-    cout << boolalpha << f->decrypt(f->encrypt("", key).first, "superkeY").first << '\t' << f->decrypt(f->encrypt("", key).first, "superkeY").second << endl;
+    cout << boolalpha << f->decrypt(f->encrypt("", key).first, "superkey").first << '\t' << f->decrypt(f->encrypt("", key).first, "superkey").second << endl;
     //cout << f->crc32("msg1msg!!!!!!!!!!!!!!#2msg3") << endl;
     return 0;
 }

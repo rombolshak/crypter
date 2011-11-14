@@ -63,7 +63,7 @@ private:
     inline int countBlocks(const string msg)
     {
 		int len = msg.length();
-		return len%16 == 0 ? len/16 : len/16 + 1;
+		return (len%16 == 0 && len > 0) ? len/16 : len/16 + 1;
     }
     
     /** 
