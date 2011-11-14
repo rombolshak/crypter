@@ -68,7 +68,12 @@ void FNetwork::generateRoundKeys(const string msg, const string key)
 			  p3 = h[2] ^ randomizer.next(),
 			  p4 = h[3] ^ randomizer.next();
 	Kprev = "";
-	st << hex << (p1^p4) << (p2^p3);
+	st << hex << (p1^p4);
+	while (st.str().length() < 32)
+	    st << '$';
+	st << (p2^p3);
+	while (st.str().length() < 64)
+	    st << '#';
 	st >> Kprev;
 	keys.push_back(Kprev);
 	st.clear();
@@ -86,17 +91,25 @@ inline string FNetwork::strxor(const string a, const string b)
 
 string FNetwork::F(const string key, const string left)
 {
-    string res = "";
+    //string res = "";
     stringstream st;
     
     unsigned int h[4];
     MD5 m = MD5(key + left);
     m.getNumbers(h);
+    
     st << hex << R[h[3]%(1<<24)];
+    while (st.str().length() < 32)
+	    st << '&';
+    
     
     m = MD5(strxor(key, left));
     m.getNumbers(h);
     st << hex << R[h[3]%(1<<24)];
-    st >> res;
-    return res;
+    
+    while (st.str().length() < 64)
+	st << '*';
+    
+    //st >> res;
+    return st.str();
 }
