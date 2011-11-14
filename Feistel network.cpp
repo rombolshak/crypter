@@ -22,12 +22,13 @@ string FNetwork::encrypt(const string _msg, const string key)
 		string s = msg.substr(i*16, 16);
 		string L = s.substr(0, 8);
 		string R = s.substr(8, 8);
-		doCrypt(L,R,i);
-		res += L; res += R;
+		res += doCrypt(L,R,i);
 	}
+	
+	return res;
 }
 
-void FNetwork::doCrypt(string _left, string _right, int i)
+string FNetwork::doCrypt(const string _left, const string _right, int i)
 {
 	string Li = _left, Ri = _right;
 	for (int k = 0; k < roundsNo; ++k) {
@@ -37,7 +38,7 @@ void FNetwork::doCrypt(string _left, string _right, int i)
 		Li = (k == roundsNo - 1)?Li:nL; 
 		Ri = (k == roundsNo - 1)?nL:nR;
 	}
-	_left = Li; _right = Ri;
+	return Li + Ri;
 }
 
 void FNetwork::fillRandArray(long unsigned int seed)
