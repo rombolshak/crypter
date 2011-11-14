@@ -2,7 +2,7 @@
 
 #include <string>
 
-string FNetwork::encrypt(const string _msg, const string key)
+string FNetwork::encrypt(const string _msg, const string key, bool enc)
 {
 	string msg = _msg;
 	
@@ -22,16 +22,24 @@ string FNetwork::encrypt(const string _msg, const string key)
 		string s = msg.substr(i*16, 16);
 		string L = s.substr(0, 8);
 		string R = s.substr(8, 8);
-		res += doCrypt(L,R,i);
+		res += doCrypt(L,R,i,enc);
 	}
 	
 	return res;
 }
 
-string FNetwork::doCrypt(const string _left, const string _right, int i)
+string FNetwork::decrypt(const std::string msg, const std::string key)
+{
+	return encrypt(msg, key, false);
+}
+
+string FNetwork::doCrypt(const string _left, const string _right, int i, bool enc)
 {
 	string Li = _left, Ri = _right;
-	for (int k = 0; k < roundsNo; ++k) {
+	for (
+		int k = enc?0:roundsNo-1;
+		enc?(k<roundsNo):(k>-1);
+		enc?++k:--k) {
 		string nL = Li, nR = Li;
 		nL = F(keys[i * roundsNo +k], nL);
 		nL = strxor(nL, Ri);

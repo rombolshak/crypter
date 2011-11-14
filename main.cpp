@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
     
     key = "keysssss";
     FNetwork *f = new FNetwork();	
-    cout << f->encrypt("msg", key) << endl;
+    cout << f->decrypt(f->encrypt("msg", key), key) << endl;
     
     return 0;
 }
