@@ -92,7 +92,7 @@ private:
 	 * @param i Номер пары блоков
 	 * @return Зашифрованную строку, соответствующую i-му блоку исходного сообщения
 	 */
-    string doCrypt(const string Left, const string Right, int i);
+    void doCrypt(string Left, string Right, int i);
 
 };
 #endif /* FEISTEL_NETWORK_H */
