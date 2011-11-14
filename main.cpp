@@ -1,27 +1,13 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
+#include <string.h>
 
 #include "md5.h"
 #include "random.h"
 #include "Feistel network.h"
 
-
-#include <termios.h>
-#include <unistd.h>
-
 using namespace std;
-
-
-void echo( bool on = true )
-{
-    struct termios settings;
-    tcgetattr( STDIN_FILENO, &settings );
-    settings.c_lflag = on
-		    ? (settings.c_lflag |   ECHO )
-		    : (settings.c_lflag & ~(ECHO));
-    tcsetattr( STDIN_FILENO, TCSANOW, &settings );
-}
-
 
 int main(int argc, char **argv) {
     
@@ -61,24 +47,14 @@ int main(int argc, char **argv) {
 	
     string key;
     
-    
-    FNetwork *f = new FNetwork();	
-    f->encrypt("a", "01234567");
     /* Вернуть после отладки !!!
-     * 
-    char c = 0;
+     
     while (key.length() != 8)
     {
 	key = "";
-	cout << "Type in a key (8 symbols):\n(If you type in more, the first 8 will be assumed as a key.)\n";
-    
-	echo(false);
-	while (key.length() != 8 && c!='\n')
-	{
-	    cin >> noskipws >> c;
-	    key += c;
-	}
-	echo(true);
+	char* buf = getpass("Type in a key (8 symbols):\n(If you type in more, the first 8 will be assumed as a key.)\n");
+	key = buf;
+	bzero(buf, strlen(buf)+1);
 	
 	if (key.length() < 8)
 	{
@@ -88,9 +64,14 @@ int main(int argc, char **argv) {
 	if (key.length() > 8)
 	{
 	    key = key.substr(0, 8);
+	    cout << "The key is OK. Proceeding to encrypt/decrypt operations...\n";
 	}
     }
-    //cout << "Your key is the value between ## ##:\n" << "##" << key  << "##" << "\n";
     * */
+    
+    key = "keysssss";
+    FNetwork *f = new FNetwork();	
+    cout << f->encrypt("msg", key) << endl;
+    
     return 0;
 }
