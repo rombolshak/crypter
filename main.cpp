@@ -13,11 +13,11 @@ using namespace std;
 void usage(string name) {
 	cout << "Usage: " << name << " <options>" << endl;
 	cout << "Options:" <<endl << endl;
-	cout << "One of the two above is **required**" << endl;
+	cout << "One of the two below is **required**" << endl;
 	cout << "-e/--encrypt\tEncrypt mode" << endl;
 	cout << "-d/--decrypt\tDecrypt mode" << endl << endl;
-	cout << "-i/--input\t**required**\t\tInput file should be the next arg" << endl;
-	cout << "-o/--output\t**out.enc by default**\tOutput file should be the next arg" << endl;
+	cout << "-i/--input\t**required**\t\tInput file name should be the next arg" << endl;
+	cout << "-o/--output\t**out.enc by default**\tOutput file name should be the next arg" << endl;
 	cout << "-h/--help\t\tShow this help and exit" << endl;
 }
 
@@ -44,44 +44,47 @@ void getKey(string key) {
 
 int main(int argc, char **argv) {
     string key; string msg;
-	bool enc; bool flag = false;
-	int inpPos = 0, outPos = 0;
-	ifstream inFile; ofstream outFile;
-	
-	for (int i = 1; i < argc; ++i) {
-		string arg = argv[i];
-		if ((arg == "-e") || (arg == "--encrypt")) {enc = true; flag = true;} else
-		if ((arg == "-d") || (arg == "--decrypt")) {enc = false;flag = true;} else
-		if ((arg == "-h") || (arg == "--help")) {usage(argv[0]); return(0);} else
-		if ((arg == "-i") || (arg == "--input")) inpPos = ++i; else
-		if ((arg == "-o") || (arg == "--output")) outPos = ++i;		
-	}
+    
+    bool enc; bool flag = false;
+    int inpPos = 0, outPos = 0;
+    ifstream inFile; ofstream outFile;
+    
+    for (int i = 1; i < argc; ++i) {
+	    string arg = argv[i];
+	    if ((arg == "-e") || (arg == "--encrypt")) {enc = true; flag = true;} else
+	    if ((arg == "-d") || (arg == "--decrypt")) {enc = false;flag = true;} else
+	    if ((arg == "-h") || (arg == "--help")) {usage(argv[0]); return(0);} else
+	    if ((arg == "-i") || (arg == "--input")) inpPos = ++i; else
+	    if ((arg == "-o") || (arg == "--output")) outPos = ++i;		
+    }
+    
     if (inpPos == 0) {cout << endl << "Input file not specified" << endl; return(0);}
-    if (!flag) {cout << endl << "You must specify what do you want to do. I'm not a telepat ;)" << endl; return(0);}
+    if (!flag) {cout << endl << "You must specify what do you want to do. I'm not a telepath ;)" << endl; return(0);}
     
     getKey(key);
 	
-	inFile.open(argv[inpPos]);
-	if (!inFile) {
-		cerr << "Unable to open file " << argv[inpPos] << endl;
-		return(1);
-	}
-	
-	outFile.open(outPos != 0 ? argv[outPos] : "out.enc");
-	if (!outFile) {
-		cerr << "Unable to open file " << argv[outPos] << endl;
-		return(1);
-	}
-	
-	string s;
-	while (inFile >> s) {
-		msg = msg + s;
-	}
-	inFile.close();
+    inFile.open(argv[inpPos]);
+    if (!inFile) {
+	    cerr << "Unable to open file " << argv[inpPos] << endl;
+	    return(1);
+    }
+    
+    outFile.open(outPos != 0 ? argv[outPos] : "out.enc");
+    if (!outFile) {
+	    cerr << "Unable to open file " << argv[outPos] << endl;
+	    return(1);
+    }
+    
+    string s;
+    while (inFile >> s) {
+	    msg += s;
+    }
+    inFile.close();
     
     FNetwork *f = new FNetwork();
-	outFile << f->encrypt(msg, key, enc).first;
-	outFile.close();
+    pair<string,bool> res = f->encrypt(msg, key, enc).first;
+    outFile << ( res.second ? res.first : "Invalid key" );
+    outFile.close();
         
     return 0;
 }
