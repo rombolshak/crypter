@@ -60,6 +60,12 @@ int main(int argc, char **argv) {
 	*/
 	
     string key;
+    
+    
+    FNetwork *f = new FNetwork();	
+    f->encrypt("a", "01234567");
+    /* Вернуть после отладки !!!
+     * 
     char c = 0;
     while (key.length() != 8)
     {
@@ -67,7 +73,6 @@ int main(int argc, char **argv) {
 	cout << "Type in a key (8 symbols):\n(If you type in more, the first 8 will be assumed as a key.)\n";
     
 	echo(false);
-	//cin >> noskipws >> key;
 	while (key.length() != 8 && c!='\n')
 	{
 	    cin >> noskipws >> c;
@@ -85,7 +90,7 @@ int main(int argc, char **argv) {
 	    key = key.substr(0, 8);
 	}
     }
-    cout << "Your key is the value between ## ##:\n" << "##" << key  << "##" << "\n";
-    
+    //cout << "Your key is the value between ## ##:\n" << "##" << key  << "##" << "\n";
+    * */
     return 0;
 }

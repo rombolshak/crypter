@@ -2,13 +2,22 @@
 
 #include <string>
 
-string FNetwork::encrypt(string msg, string key)
+string FNetwork::encrypt(const string _msg, const string key)
 {
+	string msg = _msg;
+	
+	generateRoundKeys(msg, key);
+	
+	MD5 md(key);
+	uint32_t h[4];
+	md.getNumbers(h);
+	fillRandArray(h[3]);
+	
 	int diff;
 	string res = "";
 	for (int i = 0; i < countBlocks(msg); ++i) {
 		if ((diff = msg.substr(i * 16).length() - 16) < 0) 
-			for (int k = 0; k < diff; ++k)
+			for (int k = 0; k < -diff; ++k)
 				msg += '0';
 		string s = msg.substr(i*16).substr(0, 16);
 		string L = s.substr(0, 8);
@@ -17,7 +26,7 @@ string FNetwork::encrypt(string msg, string key)
 	}
 }
 
-string FNetwork::doCrypt(string _left, string _right, int i)
+string FNetwork::doCrypt(const string _left, const string _right, int i)
 {
 	string Li = _left, Ri = _right;
 	for (int k = 0; k < roundsNo; ++k) {
