@@ -2,6 +2,7 @@
 #include <string>
 #include <unistd.h>
 #include <string.h>
+#include <fstream>
 
 #include "md5.h"
 #include "random.h"
@@ -9,69 +10,78 @@
 
 using namespace std;
 
+void usage(string name) {
+	cout << "Usage: " << name << " <options>" << endl;
+	cout << "Options:" <<endl << endl;
+	cout << "One of the two above is **required**" << endl;
+	cout << "-e/--encrypt\tEncrypt mode" << endl;
+	cout << "-d/--decrypt\tDecrypt mode" << endl << endl;
+	cout << "-i/--input\t**required**\t\tInput file should be the next arg" << endl;
+	cout << "-o/--output\t**out.enc by default**\tOutput file should be the next arg" << endl;
+	cout << "-h/--help\t\tShow this help and exit" << endl;
+}
+
+void getKey(string key) {
+	while (key.length() != 8)
+	{
+		key = "";
+		char* buf = getpass("Type in a key (8 symbols):\n(If you type in more, the first 8 will be assumed as a key.)\n");
+		key = buf;
+		bzero(buf, strlen(buf)+1);
+		
+		if (key.length() < 8)
+		{
+			cout <<  "The key is less then 8 symbols, try again.\n";
+		}
+		
+		if (key.length() > 8)
+		{
+			key = key.substr(0, 8);
+			cout << "The key is OK. Proceeding to encrypt/decrypt operations...\n";
+		}
+	}
+}
+
 int main(int argc, char **argv) {
+    string key; string msg;
+	bool enc; bool flag = false;
+	int inpPos = 0, outPos = 0;
+	ifstream inFile; ofstream outFile;
+	
+	for (int i = 1; i < argc; ++i) {
+		string arg = argv[i];
+		if ((arg == "-e") || (arg == "--encrypt")) {enc = true; flag = true;} else
+		if ((arg == "-d") || (arg == "--decrypt")) {enc = false;flag = true;} else
+		if ((arg == "-h") || (arg == "--help")) {usage(argv[0]); return(0);} else
+		if ((arg == "-i") || (arg == "--input")) inpPos = ++i; else
+		if ((arg == "-o") || (arg == "--output")) outPos = ++i;		
+	}
+    if (inpPos == 0) {cout << endl << "Input file not specified" << endl; return(0);}
+    if (!flag) {cout << endl << "You must specify what do you want to do. I'm not a telepat ;)" << endl; return(0);}
     
-	/*
-	unsigned int out[4];
-	MD5 m = MD5("md5");
-	m.getNumbers(out);
+    getKey(key);
 	
-	
-	cout << "md5 of 'grape': " << md5("grape")<<endl;
-	cout << "md5 numbers are: " << out[0] << ", " << out[1] << ", " << out[2] << ", " << out[3] << ", " << endl;
-	
-	
-	Random *r = new Random();
-	r->seed(out[0]);
-	cout << "First 10 random numbers with seed " << out[0] << ":\n";
-	for (int i=0;i<10;++i)
-	    cout << i << ':' << r->next() << endl;
-	
-	r->seed(0);
-	cout << "First 10 random numbers with 0 seed:\n";
-	for (int i=0;i<10;++i)
-	    cout << i << ':' << r->next() << endl;
-	
-	
-	r->seed();
-	cout << "Firs 50 random numbers with default seed:\n";
-	for (int i=0;i<50;++i)
-	    cout << i << ':' << r->next() << endl;
-	
-	
-	FNetwork* f = new FNetwork();
-	f->generateRoundKeys("msg", "qwertyqwerty"); 	// - private now
-	f->fillRandArray(0);				// - private now
-	cout << f->F("Iamagood", "12345678");		// - private now
-	*/
-	
-    string key;
-    
-    /* Вернуть после отладки !!!
-     
-    while (key.length() != 8)
-    {
-	key = "";
-	char* buf = getpass("Type in a key (8 symbols):\n(If you type in more, the first 8 will be assumed as a key.)\n");
-	key = buf;
-	bzero(buf, strlen(buf)+1);
-	
-	if (key.length() < 8)
-	{
-	    cout <<  "The key is less then 8 symbols, try again.\n";
+	inFile.open(argv[inpPos]);
+	if (!inFile) {
+		cerr << "Unable to open file " << argv[inpPos] << endl;
+		return(1);
 	}
 	
-	if (key.length() > 8)
-	{
-	    key = key.substr(0, 8);
-	    cout << "The key is OK. Proceeding to encrypt/decrypt operations...\n";
+	outFile.open(outPos != 0 ? argv[outPos] : "out.enc");
+	if (!outFile) {
+		cerr << "Unable to open file " << argv[outPos] << endl;
+		return(1);
 	}
-    }
-    * */
+	
+	string s;
+	while (inFile >> s) {
+		msg = msg + s;
+	}
+	inFile.close();
     
-    key = "superkey";
     FNetwork *f = new FNetwork();
-    cout << boolalpha << f->decrypt(f->encrypt("", key).first, "superkey").first << '\t' << f->decrypt(f->encrypt("", key).first, "superkey").second << endl;
-    //cout << f->crc32("msg1msg!!!!!!!!!!!!!!#2msg3") << endl;
+	outFile << f->encrypt(msg, key, enc).first;
+	outFile.close();
+        
     return 0;
 }
