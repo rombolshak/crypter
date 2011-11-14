@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     inFile.close();
     
     FNetwork *f = new FNetwork();
-    pair<string,bool> res = f->encrypt(msg, key, enc).first;
+    pair<string,bool> res = f->encrypt(msg, key, enc);
     outFile << ( res.second ? res.first : "Invalid key" );
     outFile.close();
         
