@@ -44,8 +44,8 @@ string FNetwork::doCrypt(const string _left, const string _right, int i, bool en
 		string nL = Li, nR = Li;
 		nL = F(keys[i * roundsNo + k], nL);
 		nL = strxor(nL, Ri);
-		Li = (k == roundsNo - 1)?Li:nL; 
-		Ri = (k == roundsNo - 1)?nL:nR;
+		Li = (k == (enc?(roundsNo - 1):0))?Li:nL; 
+		Ri = (k == (enc?(roundsNo - 1):0))?nL:nR;
 	}
 	return Li + Ri;
 }
