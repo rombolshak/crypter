@@ -18,13 +18,14 @@ string FNetwork::encrypt(const string _msg, const string key, bool enc)
 	for (int i = 0; i < countBlocks(msg); ++i) {
 		if ((diff = msg.substr(i * 16).length() - 16) < 0) 
 			for (int k = 0; k < -diff; ++k)
-				msg += '\0';
+				msg += '$';
 		string s = msg.substr(i*16, 16);
 		string L = s.substr(0, 8);
 		string R = s.substr(8, 8);
 		res += doCrypt(L,R,i,enc);
 	}
 	
+	keys.clear();
 	return res;
 }
 
@@ -41,7 +42,7 @@ string FNetwork::doCrypt(const string _left, const string _right, int i, bool en
 		enc?(k<roundsNo):(k>-1);
 		enc?++k:--k) {
 		string nL = Li, nR = Li;
-		nL = F(keys[i * roundsNo +k], nL);
+		nL = F(keys[i * roundsNo + k], nL);
 		nL = strxor(nL, Ri);
 		Li = (k == roundsNo - 1)?Li:nL; 
 		Ri = (k == roundsNo - 1)?nL:nR;
@@ -77,10 +78,10 @@ void FNetwork::generateRoundKeys(const string msg, const string key)
 			  p4 = h[3] ^ randomizer.next();
 	Kprev = "";
 	st << hex << (p1^p4);
-	while (st.str().length() < 32)
+	while (st.str().length() < 8)
 	    st << '$';
 	st << (p2^p3);
-	while (st.str().length() < 64)
+	while (st.str().length() < 16)
 	    st << '#';
 	st >> Kprev;
 	keys.push_back(Kprev);
@@ -107,7 +108,7 @@ string FNetwork::F(const string key, const string left)
     m.getNumbers(h);
     
     st << hex << R[h[3]%(1<<24)];
-    while (st.str().length() < 32)
+    while (st.str().length() < 8)
 	    st << '&';
     
     
@@ -115,9 +116,10 @@ string FNetwork::F(const string key, const string left)
     m.getNumbers(h);
     st << hex << R[h[3]%(1<<24)];
     
-    while (st.str().length() < 64)
+    while (st.str().length() < 16)
 	st << '*';
     
     //st >> res;
+    //cout << "Key:\t" << key << "\tLeft:\t" << left << "\tres:\t" << st.str() << endl;
     return st.str();
 }

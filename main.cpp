@@ -69,9 +69,10 @@ int main(int argc, char **argv) {
     }
     * */
     
-    key = "keysssss";
+    key = "superkey";
+    cout << key.length() << endl;
     FNetwork *f = new FNetwork();	
-    cout << f->decrypt(f->encrypt("msg", key), key) << endl;
+    cout << f->decrypt(f->encrypt("msg1msg2msg3msg4", key), key) << endl;
     
     return 0;
 }
