@@ -35,7 +35,7 @@ public:
 	 * @param key Ключ шифрования
 	 * @return Зашифрованное сообщение
 	 * */
-    string encrypt (const string msg, const string key, bool enc=true);
+    pair<string, bool> encrypt (const string msg, const string key, bool enc=true);
 	
 	/** 
 	 * Для каждого куска по 128 бит применить roundsNo раз итерацию шифрования с
@@ -44,7 +44,7 @@ public:
 	 * @param key Ключ шифрования
 	 * @return Исходное сообщение, если ключ был верен
 	 * */
-    string decrypt (const string msg, const string key);
+    pair<string, bool> decrypt (const string msg, const string key);
 	
 
 
@@ -94,6 +94,8 @@ private:
 	 * @return Зашифрованную строку, соответствующую i-му блоку исходного сообщения
 	 */
     string doCrypt(const string Left, const string Right, int i, bool enc = true);
+
+    string crc32(const string buf);
 
 };
 #endif /* FEISTEL_NETWORK_H */

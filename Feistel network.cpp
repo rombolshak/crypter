@@ -2,7 +2,7 @@
 
 #include <string>
 
-string FNetwork::encrypt(const string _msg, const string key, bool enc)
+pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool enc)
 {
 	string msg = _msg;
 	
@@ -15,6 +15,15 @@ string FNetwork::encrypt(const string _msg, const string key, bool enc)
 	
 	int diff;
 	string res = "";
+	string crc = "";
+	if (enc)
+	    res = crc32(msg);
+	else
+	{
+	    crc = msg.substr(0, 8);
+	    msg = msg.substr(8);
+	}
+	
 	for (int i = 0; i < countBlocks(msg); ++i) {
 		if ((diff = msg.substr(i * 16).length() - 16) < 0) 
 			for (int k = 0; k < -diff; ++k)
@@ -26,10 +35,21 @@ string FNetwork::encrypt(const string _msg, const string key, bool enc)
 	}
 	
 	keys.clear();
-	return res;
+	
+	if (!enc)
+	{
+	    string crcDec = crc32(res);
+	    
+	    //cout << "!!" << res << endl << crc << endl << crcDec << endl;
+	    if (crcDec != crc)
+		return pair<string, bool>("", false);
+	    //return res;
+	}
+	
+	return pair<string, bool>(res, true);
 }
 
-string FNetwork::decrypt(const std::string msg, const std::string key)
+pair<string, bool> FNetwork::decrypt(const std::string msg, const std::string key)
 {
 	return encrypt(msg, key, false);
 }
@@ -122,4 +142,44 @@ string FNetwork::F(const string key, const string left)
     //st >> res;
     //cout << "Key:\t" << key << "\tLeft:\t" << left << "\tres:\t" << st.str() << endl;
     return st.str();
+}
+
+string FNetwork::crc32(const string _buf)
+{
+    uint32_t crc_table[256];
+    uint32_t crc; 
+ 
+    string buf = _buf;
+    size_t fst = buf.find_first_of('\0');
+    buf = buf.substr(0, fst);
+    
+    for (int i = 0; i < 256; i++)
+    {
+        crc = i;
+        for (int j = 0; j < 8; j++)
+            crc = crc & 1 ? (crc >> 1) ^ 0xEDB88320UL : crc >> 1;
+ 
+        crc_table[i] = crc;
+    };
+ 
+    crc = 0xFFFFFFFFUL;
+    
+    int len = buf.length();
+    int i = 0;
+    
+    while (len--) 
+        crc = crc_table[(crc ^ buf[i++]) & 0xFF] ^ (crc >> 8);
+ 
+    crc ^= 0xFFFFFFFFUL;
+    
+    stringstream res;
+    string _res = "";
+    res << hex << crc;
+    for (int diff = 8 - res.str().length(); diff > 0; --diff)
+    {
+	_res += '0';
+    }
+    _res += res.str();
+    //cout << _res << endl;
+    return _res;
 }
