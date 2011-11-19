@@ -6,8 +6,7 @@ pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool e
 {
 	string msg = _msg;
 	
-	generateRoundKeys(msg, key);
-	
+		
 	MD5 md(key);
 	uint32_t h[4];
 	md.getNumbers(h);
@@ -20,9 +19,17 @@ pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool e
 	    res = crc32(msg);
 	else
 	{
+		cout << "initmsglen:" << msg.length() << endl << msg << endl;
 	    crc = msg.substr(0, 8);
 	    msg = msg.substr(8);
+		cout << "Crc:" << crc << endl;
+		cout << "Msg wo crc:" << msg << "\tlen:" << msg.length() << endl;
+		
 	}
+	
+	generateRoundKeys(msg, key);
+	for (int i=0; i<keys.size();++i)
+		cout << "key " << i << "\t" << keys[i] << endl;
 	
 	for (int i = 0; i < countBlocks(msg); ++i) {
 		if ((diff = msg.substr(i * 16).length() - 16) < 0) 
@@ -40,12 +47,11 @@ pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool e
 	{
 	    string crcDec = crc32(res);
 	    
-	    //cout << "!!" << res << endl << crc << endl << crcDec << endl;
+	    cout << "!!" << endl << res << endl << crc << endl << crcDec << endl;
 	    if (crcDec != crc)
-		return pair<string, bool>("", false);
-	    //return res;
+			return pair<string, bool>("", false);
 	}
-	
+	cout << "reslen:" << res.length() << endl << res << endl;
 	return pair<string, bool>(res, true);
 }
 
