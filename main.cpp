@@ -37,7 +37,7 @@ void getKey(string& key) {
 		if (key.length() > 8)
 		{
 			key = key.substr(0, 8);
-			cout << "The key is OK. Proceeding to encrypt/decrypt operations...\n";
+			cout << "The key is scanned. Proceeding to encrypt/decrypt operations...\n";
 		}
 	}
 }
@@ -81,44 +81,58 @@ int main(int argc, char **argv) {
 		if (i != s.size() - 1) msg += "\n";
 	}*/
 	
-	std::ifstream fs(argv[inpPos], std::ios::in | std::ios::binary);
-	
-	if( !fs )
-	{
-		cout << "file open error!!!" << endl;
+    std::ifstream fs(argv[inpPos], std::ios::in | std::ios::binary);
+    
+    if( !fs )
+    {
+	    cout << "Unable to open file " << argv[inpPos] << endl;
+	    return 1;
+    }
+    
+    std::vector<char> buffer;
+    std::ifstream::pos_type size = 0;
+    
+    if( fs.seekg(0, std::ios::end) )
+    {
+	    size = fs.tellg();
+    }
+    
+    if( size && fs.seekg(0, std::ios::beg) )
+    {
+	    buffer.resize(size);
+	    fs.read(&buffer[0], size);
+    }
+    
+    for (int i = 0; i < buffer.size(); ++i)
+	    msg += buffer[i];
+    
+    //cout << msg << endl;
+    FNetwork *f = new FNetwork();
+    pair<string,bool> res = f->encrypt(msg, key, enc);
+    
+    if (res.second)
+    {
+	//cout << res.first << endl;
+	outFile.open(outPos != 0 ? argv[outPos] : (enc ? "out.enc" : "out.dec") );
+	if (!outFile) {
+		cerr << "Unable to open file " << argv[outPos] << endl;
 		return 1;
 	}
 	
-	std::vector<char> buffer;
-	std::ifstream::pos_type size = 0;
+	if (enc)
+	    cout << "Done." << endl;
+	else
+	    cout    << "The key is possibly valid. You may check the output file." << endl;
 	
-	if( fs.seekg(0, std::ios::end) )
-	{
-		size = fs.tellg();
-	}
-	
-	if( size && fs.seekg(0, std::ios::beg) )
-	{
-		buffer.resize(size);
-		fs.read(&buffer[0], size);
-	}
-	
-	for (int i = 0; i < buffer.size(); ++i)
-		msg += buffer[i];
-	
-    cout << msg << endl;
-    FNetwork *f = new FNetwork();
-    pair<string,bool> res = f->encrypt(msg, key, enc);
-	cout << res.first << endl;
-	outFile.open(outPos != 0 ? argv[outPos] : "out.enc");
-	if (!outFile) {
-		cerr << "Unable to open file " << argv[outPos] << endl;
-		return(1);
-	}
-    outFile << ( res.second ? res.first : "Invalid key");
-// 	string res = f->encrypt(msg, "11111111").first;
-// 	cout << res << endl << f->encrypt(res, "11111111", false).second << endl;
-    outFile.close();
+	outFile << ( res.second ? res.first : "Invalid key");
+	// 	string res = f->encrypt(msg, "11111111").first;
+	// 	cout << res << endl << f->encrypt(res, "11111111", false).second << endl;
+	outFile.close();
+    }
+    else
+    {
+	cout << "Invalid key." << endl;
+    }
         
     return 0;
 }

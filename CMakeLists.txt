@@ -1,3 +1,3 @@
 project(blockcrypt)
 
-add_executable(blockcrypt main.cpp md5.cpp random.cpp Feistel\ network.cpp)
+add_executable(blockcrypt md5.cpp random.cpp main.cpp Feistel\ network.cpp)
