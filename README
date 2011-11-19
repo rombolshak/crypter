@@ -1,5 +1,7 @@
 This program implements block cryptography algorithm based on Feistel network.
-Increasing the message length is equal to 8 bytes.
+Block size: 128 bit
+Key size: 64 bit
+
 Compile:
 
 mkdir build
