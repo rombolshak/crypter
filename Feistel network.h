@@ -33,7 +33,8 @@ public:
 	 * заданной F, записывая резултат в строку.
 	 * @param msg Исходное сообщение
 	 * @param key Ключ шифрования
-	 * @return Зашифрованное сообщение
+	 * @param enc Если true, то режим шифрования, иначе расшифровки
+	 * @return Пара: строка - за/дешифрованное сообщение, bool - верна ли расшифровка. Если false, то строка пуста
 	 * */
     pair<string, bool> encrypt (const string msg, const string key, bool enc=true);
 	
@@ -75,6 +76,9 @@ private:
 	 * */
 	void generateRoundKeys(const string msg, const string key);
  	
+	/**
+	 * Секретная функция. Вы никогда не догадаетесь, что она делает
+	 */
     string strxor (const string a, const string b);
     
 	/**
@@ -95,6 +99,9 @@ private:
 	 */
     string doCrypt(const string Left, const string Right, int i, bool enc = true);
 
+	/**
+	 * Подсчет контрольной суммы
+	 */
     string crc32(const string buf);
 
 };
