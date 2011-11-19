@@ -1,4 +1,4 @@
-This program implements own block cryptography algorithm.
+This program implements block cryptography algorithm based on Feistel network.
 Increasing the message length is equal to 8 bytes.
 Compile:
 
