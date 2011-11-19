@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with cmc2011RM blockcrypt.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "random.h"
 
 void Random::seed (uint32_t _seed)

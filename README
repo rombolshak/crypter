@@ -1,5 +1,14 @@
 This program implements own block cryptography algorithm.
 Increasing the message length is equal to 8 bytes.
+Compile:
+
+mkdir build
+cd build
+cmake ../
+make
+
+Run: ./blockcrypt
+
 Usage: run program with -h or --help
 
 NOTE: derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm
