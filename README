@@ -14,3 +14,7 @@ Run: ./blockcrypt
 Usage: run program with -h or --help
 
 NOTE: derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm
+
+Authors: 
+	Mikhail Startsev  // He wanted to be the first. Okay
+	Roman Bolshakov
