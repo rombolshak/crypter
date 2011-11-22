@@ -1,4 +1,4 @@
-This program implements block cryptography algorithm based on Feistel network.
+/This program implements block cryptography algorithm based on Feistel network.
 Block size: 128 bit
 Key size: 64 bit
 
@@ -39,7 +39,7 @@ I. Алгоритм гнерации ключей:
 	2) 4 часла-результата предыдущего шага сохраняем в переменные P1, P2, P3, P4 соответственно.
 	3) Вычисляем K(i+1) = (P1 xor P4) + (P2 xor P3), где + - конкатенация строк. При необходимости дополняем строку
 	    необходимым числом байтов до 64 бит
-
+	4) Повторяем, увеличиваю i на 1, пока не сгенерируем нужно число ключей.
     Раундовые ключи - ключи с номерами от 1 и далее
 
 II. Функция F сети Феёстеля
