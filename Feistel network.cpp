@@ -33,6 +33,7 @@ pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool e
 
     int diff;
     string res = "";
+    /*
     string crc = "";
     if (enc)
         res = crc32(msg);
@@ -41,7 +42,7 @@ pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool e
         crc = msg.substr(0, 8);
         msg = msg.substr(8);
     }
-
+    */
     generateRoundKeys(msg, key);
 
     for (int i = 0; i < countBlocks(msg); ++i) {
@@ -55,7 +56,7 @@ pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool e
     }
 
     keys.clear();
-
+    /*
     if (!enc)
     {
         string crcDec = crc32(res);
@@ -63,6 +64,7 @@ pair<string, bool> FNetwork::encrypt(const string _msg, const string key, bool e
         if (crcDec != crc)
             return pair<string, bool>("", false);
     }
+    */
     return pair<string, bool>(res, true);
 }
 
@@ -160,6 +162,7 @@ string FNetwork::F(const string key, const string left)
     return st.str();
 }
 
+/*
 string FNetwork::crc32(const string _buf)
 {
     uint32_t crc_table[256];
@@ -198,4 +201,4 @@ string FNetwork::crc32(const string _buf)
     _res += res.str();
     return _res;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+*/

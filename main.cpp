@@ -129,8 +129,8 @@ int main(int argc, char **argv) {
     FNetwork *f = new FNetwork();
     pair<string,bool> res = f->encrypt(msg, key, enc);
 
-    if (res.second)
-    {
+    //if (res.second)
+    //{
         outFile.open(outPos != 0 ? argv[outPos] : (enc ? "out.enc" : "out.dec") );
         if (!outFile) {
             cerr << "Unable to open file " << argv[outPos] << endl;
@@ -139,16 +139,16 @@ int main(int argc, char **argv) {
 
         if (enc)
             cout << "Done." << endl;
-        else
-            cout    << "The key is possibly valid. You may check the output file." << endl;
+        //else
+        //    cout    << "The key is possibly valid. You may check the output file." << endl;
 
         outFile << ( res.second ? res.first : "Invalid key");
         outFile.close();
-    }
-    else
-    {
-        cout << "Invalid key." << endl;
-    }
+    //}
+    //else
+    //{
+    //    cout << "Invalid key." << endl;
+    //}
 
     return 0;
 }
