@@ -92,18 +92,18 @@ private:
 	 * @param msg Сообщение, на основе которого генерируется массив
 	 * @param key Ключ, на основе которого генерируются остальные ключи
 	 * */
-	void generateRoundKeys(const string msg, const string key);
- 	
-	/**
-	 * Секретная функция. Вы никогда не догадаетесь, что она делает
-	 */
+    void generateRoundKeys(const string msg, const string key);
+    
+    /**
+	* Секретная функция. Вы никогда не догадаетесь, что она делает
+	*/
     string strxor (const string a, const string b);
     
 	/**
 	 * Делает основную магию
 	 * @param key Ключ из массива R, предварительно сгенерированный @see generateRoundKeys
 	 * @param left Левая часть блока данных
-	 * @return Зашифрованный кусок текста, подлежащий складыванию по модулю со вторым куском
+	 * @return Зашифрованный кусок текста, подлежащий конкатенации со вторым куском
 	 */
     string F (const string key, const string left);
 	
@@ -120,7 +120,7 @@ private:
 	/**
 	 * Подсчет контрольной суммы
 	 */
-    string crc32(const string buf);
+    //string crc32(const string buf);
 
 };
 #endif /* FEISTEL_NETWORK_H */
