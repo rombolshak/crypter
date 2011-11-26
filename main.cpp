@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <fstream>
+#include <math.h>
 
 #include "md5.h"
 #include "random.h"
@@ -40,25 +41,52 @@ void usage(string name) {
     cout << "-h/--help\t\tShow this help and exit" << endl;
 }
 
+string IntToString(int i)
+{
+	string s = "";
+	if (i == 0)
+	{
+		s = "0";
+		return s;
+	}
+	if (i < 0)
+	{
+		s += '-';
+		i = -i;
+	}
+	int count = log10(i);
+	while (count >= 0)
+	{
+		s += ('0' + i/pow(10.0, count));
+		i -= static_cast<int>(i/pow(10.0,count)) * static_cast<int>(pow(10.0,count));
+		count--;
+	}
+	return s;
+}
+
 void getKey(string& key) {
-    while (key.length() != 8)
-    {
+    
         key = "";
-        char* buf = getpass("Type in a key (8 symbols):\n(If you type in more, the first 8 will be assumed as a key.)\n");
+        char* buf = getpass("Type in a key:\n");
         key = buf;
         bzero(buf, strlen(buf)+1);
 
-        if (key.length() < 8)
-        {
-            cout <<  "The key is less then 8 symbols, try again.\n";
-        }
-
-        if (key.length() > 8)
-        {
-            key = key.substr(0, 8);
-            cout << "The key is scanned. Proceeding to encrypt/decrypt operations...\n";
-        }
-    }
+		string last = "";
+        for (int i = 0; i < key.length() / 16 + (key.length()%16)?1:0 - 1; ++i) {
+			if (i * 16 >= key.length()) break;
+			string sub = md5(IntToString(i) + key.substr(i * 16, 16));
+			if (last == "") last = sub;
+			else {
+				last = "";
+				int n = min(last.length(), sub.length());
+				for (int j=0;j<n;++j)
+					last += last[j]^sub[j];
+			}
+		}
+		string s1 = last.substr(0, 16), s2 = last.substr(16, 16);
+		key = "";
+		for (int j=0;j<16;++j)
+			key += s1[j]^s2[j];
 }
 
 int main(int argc, char **argv) {

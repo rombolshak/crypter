@@ -380,4 +380,8 @@ std::ostream& operator<<(std::ostream& out, MD5 md5)
 	return out << md5.hexdigest();
 }
 
+std::string md5(const std::string str) {
+	MD5 m(str);
+	return m.hexdigest();
+}
 //////////////////////////////
