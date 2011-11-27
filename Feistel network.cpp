@@ -127,6 +127,9 @@ void FNetwork::generateRoundKeys(const string msg, const string key)
         st >> Kprev;
         keys.push_back(Kprev);
         st.clear();
+	
+	m = MD5(Kprev);
+	m.getNumbers(h);
     }
 }
 

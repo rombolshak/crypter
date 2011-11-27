@@ -19,7 +19,6 @@
 
 #include <iostream>
 #include <string>
-#include <unistd.h>
 #include <string.h>
 #include <fstream>
 #include <math.h>
@@ -43,6 +42,7 @@ void usage(string name) {
 
 string IntToString(int i)
 {
+    /*
 	string s = "";
 	if (i == 0)
 	{
@@ -62,6 +62,10 @@ string IntToString(int i)
 		count--;
 	}
 	return s;
+    */
+    stringstream ss;
+    ss << i;
+    return ss.str();
 }
 
 void getKey(string& key) {
@@ -70,23 +74,29 @@ void getKey(string& key) {
         char* buf = getpass("Type in a key:\n");
         key = buf;
         bzero(buf, strlen(buf)+1);
-
-		string last = "";
-        for (int i = 0; i < key.length() / 16 + (key.length()%16)?1:0 - 1; ++i) {
-			if (i * 16 >= key.length()) break;
-			string sub = md5(IntToString(i) + key.substr(i * 16, 16));
-			if (last == "") last = sub;
-			else {
-				last = "";
-				int n = min(last.length(), sub.length());
-				for (int j=0;j<n;++j)
-					last += last[j]^sub[j];
-			}
-		}
-		string s1 = last.substr(0, 16), s2 = last.substr(16, 16);
-		key = "";
-		for (int j=0;j<16;++j)
-			key += s1[j]^s2[j];
+	
+	string last = "";
+	while (key.length() % 16 != 0)
+	    key += '0';
+	
+	for (int i = 0; i < key.length() / 16; ++i) 
+	{
+	    string sub = md5(IntToString(i) + key.substr(i * 16, 16));
+	 
+	    if (last == "") last = sub;
+	    else {
+		string res = "";
+		int n = min(last.length(), sub.length());
+		for (int j=0;j<n;++j)
+			res += last[j]^sub[j];
+		last = res;
+	    }
+	}
+	
+	string s1 = last.substr(0, 16), s2 = last.substr(16, 16);
+	key = "";
+	for (int j=0;j<16;++j)
+		key += s1[j]^s2[j];
 }
 
 int main(int argc, char **argv) {
@@ -99,6 +109,7 @@ int main(int argc, char **argv) {
     ifstream inFile;
     ofstream outFile;
 
+    
     for (int i = 1; i < argc; ++i) {
         string arg = argv[i];
         if ((arg == "-e") || (arg == "--encrypt")) {
