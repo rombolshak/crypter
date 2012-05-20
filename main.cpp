@@ -22,7 +22,7 @@
 #include <string.h>
 #include <fstream>
 #include <math.h>
-
+#include <unistd.h>
 #include "md5.h"
 #include "random.h"
 #include "Feistel network.h"
